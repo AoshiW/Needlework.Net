@@ -46,7 +46,7 @@
 			<controls:UserCard UserImage="/Assets/Users/aoshiw.png"
 							   UserName="AoshiW"
 							   UserGithub="AoshiW">
-				For PR.
+				For PRs that we needed the most.
 			</controls:UserCard>
 		</WrapPanel>
 	</ScrollViewer>
