@@ -29,6 +29,8 @@ public partial class WebSocketViewModel : PageBase, IEnableLogger
 {
     private Dictionary<string, EventMessage> _events = [];
 
+    private readonly AvaloniaList<EventViewModel> _filteredEventLog = new();
+
     private readonly IFlurlClient _githubUserContentClient;
 
     private readonly NotificationService _notificationService;
@@ -53,7 +55,20 @@ public partial class WebSocketViewModel : PageBase, IEnableLogger
 
     public CancellationTokenSource TokenSource { get; set; } = new();
 
-    public IReadOnlyList<EventViewModel> FilteredEventLog => string.IsNullOrWhiteSpace(Search) ? EventLog : [.. EventLog.Where(x => x.Key.Contains(Search, StringComparison.InvariantCultureIgnoreCase))];
+    public IReadOnlyList<EventViewModel> FilteredEventLog
+    {
+        get
+        {
+            IEnumerable<EventViewModel> events = EventLog;
+            if (!string.IsNullOrWhiteSpace(Search))
+            {
+                events = events.Where(x => x.Key.Contains(Search, StringComparison.InvariantCultureIgnoreCase));
+            }
+            _filteredEventLog.Clear();
+            _filteredEventLog.AddRange(events);
+            return _filteredEventLog;
+        }
+    }
 
     [ObservableProperty]
     private Vector _eventLogOffset = new();
